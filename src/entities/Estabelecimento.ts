@@ -4,20 +4,17 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
+  OneToMany,
 } from "typeorm";
-import { Interprete } from "./Interprete";
+import { SalaDeAula } from "./SalaDeAula";
 
-@Entity("alunos")
-export class Aluno {
+@Entity("estabelecimentos")
+export class Estabelecimento {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({ type: "varchar", length: 255 })
   nome: string;
-
-  @Column({ type: "char", length: 11, unique: true })
-  cpf: string;
 
   @CreateDateColumn()
   data_criacao: Date;
@@ -25,6 +22,6 @@ export class Aluno {
   @UpdateDateColumn()
   data_alteracao: Date;
 
-  @ManyToOne(() => Interprete, (interprete) => interprete.alunos)
-  interprete: Interprete;
+  @OneToMany(() => SalaDeAula, (sala_de_aula) => sala_de_aula.estabelecimento)
+  salas_de_aula: SalaDeAula[];
 }

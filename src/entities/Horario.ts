@@ -1,21 +1,32 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Interprete } from "./Interprete";
+import { SalaDeAula } from "./SalaDeAula";
 
 @Entity("horarios")
 export class Horario {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @Column()
+  horario: Date;
 
-    @Column()
-    data: Date;
+  @CreateDateColumn()
+  data_criacao: Date;
 
-    @CreateDateColumn()
-    created_at: Date;
+  @UpdateDateColumn()
+  data_alteracao: Date;
 
-    @UpdateDateColumn()
-    updated_at: Date;
+  @ManyToOne(() => Interprete, (interprete) => interprete.horarios)
+  interprete: Interprete;
 
-    @ManyToOne(() => Interprete, interprete => interprete.horarios)
-    interprete: Interprete;
+  @ManyToMany(() => SalaDeAula, (sala_de_aula) => sala_de_aula.horarios)
+  salas_de_aula: SalaDeAula[];
 }

@@ -13,10 +13,14 @@ const getAllUsuarioController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const usuarios = await getAllUsuariosService();
-  if (usuarios.length === 0)
-    return res.status(204).send("Não há usuarios cadastrados");
-  res.status(200).send(usuarios);
+  try {
+    const usuarios = await getAllUsuariosService();
+    if (usuarios.length === 0)
+      return res.status(204).send("Não há usuarios cadastrados");
+    res.status(200).send(usuarios);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getByIdUsuarioController = async (
@@ -24,10 +28,14 @@ const getByIdUsuarioController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
-  const usuario = await getByIdUsuarioService(id);
-  if (!usuario) throw new NotFoundError("Usuario não encontrado");
-  res.status(200).send(usuario);
+  try {
+    const { id } = req.params;
+    const usuario = await getByIdUsuarioService(id);
+    if (!usuario) throw new NotFoundError("Usuario não encontrado");
+    res.status(200).send(usuario);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getByUsernameUsuarioController = async (
@@ -35,9 +43,13 @@ const getByUsernameUsuarioController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const usuario = await postUsuarioService(req.body);
-  if (!usuario) throw new NotFoundError("Usuario não encontrado");
-  res.status(200).send(usuario);
+  try {
+    const usuario = await postUsuarioService(req.body);
+    if (!usuario) throw new NotFoundError("Usuario não encontrado");
+    res.status(200).send(usuario);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const postUsuarioController = async (

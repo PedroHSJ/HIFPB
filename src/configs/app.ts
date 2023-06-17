@@ -1,13 +1,13 @@
 import express, { NextFunction, Request, Response } from "express";
 import { alunoRoutes, authRoutes, usuarioRoutes } from "../routes";
 import { errorMiddleware } from "../middlewares/error";
+import validateToken from "../middlewares/authMiddleware";
 
 const app = express();
 
 app.use(express.json());
 
-app.use("/alunos", alunoRoutes);
-app.use("/usuario", usuarioRoutes);
+app.use("/usuario", validateToken, usuarioRoutes);
 app.use("/auth", authRoutes);
 
 //Interceptando erros

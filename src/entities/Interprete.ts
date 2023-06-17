@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Horario } from "./Horario";
+import { Aluno } from "./Aluno";
 
 @Entity("interpretes")
 export class Interprete {
@@ -20,11 +21,14 @@ export class Interprete {
   cpf: string;
 
   @CreateDateColumn()
-  created_at: Date;
+  data_criacao: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  data_alteracao: Date;
 
   @OneToMany(() => Horario, (horario) => horario.interprete)
   horarios: Horario[];
+
+  @OneToMany(() => Aluno, (aluno) => aluno.interprete)
+  alunos: Aluno[];
 }
