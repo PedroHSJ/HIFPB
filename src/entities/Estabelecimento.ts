@@ -24,4 +24,7 @@ export class Estabelecimento {
 
   @OneToMany(() => SalaDeAula, (sala_de_aula) => sala_de_aula.estabelecimento)
   salas_de_aula: SalaDeAula[];
+
+  @Column({ type: "varchar", length: 14, unique: true })
+  cnpj: string;
 }

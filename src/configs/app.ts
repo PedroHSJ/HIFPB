@@ -1,5 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
-import { alunoRoutes, authRoutes, usuarioRoutes } from "../routes";
+import {
+  alunoRoutes,
+  authRoutes,
+  estabelecimentoRoutes,
+  usuarioRoutes,
+} from "../routes";
 import { errorMiddleware } from "../middlewares/error";
 import validateToken from "../middlewares/authMiddleware";
 
@@ -7,8 +12,16 @@ const app = express();
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
 app.use("/usuario", validateToken, usuarioRoutes);
 app.use("/auth", authRoutes);
+app.use("/estabelecimento", estabelecimentoRoutes);
 
 //Interceptando erros
 app.use(errorMiddleware);
