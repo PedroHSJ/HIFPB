@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { Min } from "class-validator";
+
 @Entity("usuarios")
 export class Usuario {
   @PrimaryGeneratedColumn("uuid")
@@ -15,6 +17,7 @@ export class Usuario {
   username: string;
 
   @Column({ type: "varchar", length: 64 })
+  @Min(8)
   password: string;
 
   @CreateDateColumn()

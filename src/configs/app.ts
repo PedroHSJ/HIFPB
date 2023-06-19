@@ -4,6 +4,7 @@ import {
   authRoutes,
   estabelecimentoRoutes,
   usuarioRoutes,
+  salaDeAulaRoutes,
 } from "../routes";
 import { errorMiddleware } from "../middlewares/error";
 import validateToken from "../middlewares/authMiddleware";
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 app.use("/usuario", validateToken, usuarioRoutes);
 app.use("/auth", authRoutes);
 app.use("/estabelecimento", estabelecimentoRoutes);
+app.use("/salaDeAula", salaDeAulaRoutes);
 
 //Interceptando erros
 app.use(errorMiddleware);

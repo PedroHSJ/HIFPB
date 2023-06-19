@@ -42,6 +42,7 @@ const postUsuarioService = async (usuario: Usuario) => {
 
 const putUsuarioService = async (usuario: Usuario) => {
   if (!usuario) throw new BadResquestError("Usuario não informado");
+
   const newUsuario = await putUsuarioRepository(usuario);
   return newUsuario;
 };

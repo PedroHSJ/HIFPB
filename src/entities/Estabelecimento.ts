@@ -8,6 +8,16 @@ import {
 } from "typeorm";
 import { SalaDeAula } from "./SalaDeAula";
 
+import {
+  IsNotEmpty,
+  IsString,
+  Matches,
+  Max,
+  MaxLength,
+  Min,
+  MinLength,
+} from "class-validator";
+
 @Entity("estabelecimentos")
 export class Estabelecimento {
   @PrimaryGeneratedColumn("uuid")
@@ -26,5 +36,6 @@ export class Estabelecimento {
   salas_de_aula: SalaDeAula[];
 
   @Column({ type: "varchar", length: 14, unique: true })
+  @IsNotEmpty({ message: "CNPJ é obrigatório" })
   cnpj: string;
 }
