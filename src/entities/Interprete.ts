@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Horario } from "./Horario";
+import { DiaDaSemana } from "./DiaDaSemana";
 import { Aluno } from "./Aluno";
 import { IBase } from "../interfaces/IBase";
 
@@ -27,8 +27,8 @@ export class Interprete implements IBase {
   @UpdateDateColumn()
   data_alteracao: Date;
 
-  @OneToMany(() => Horario, (horario) => horario.interprete)
-  horarios: Horario[];
+  @OneToMany(() => DiaDaSemana, (dia_da_semana) => dia_da_semana.interprete)
+  dias_da_semana: DiaDaSemana[];
 
   @OneToMany(() => Aluno, (aluno) => aluno.interprete)
   alunos: Aluno[];

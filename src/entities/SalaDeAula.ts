@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Horario } from "./Horario";
+import { DiaDaSemana } from "./DiaDaSemana";
 import { Estabelecimento } from "./Estabelecimento";
 import { IBase } from "../interfaces/IBase";
 
@@ -21,19 +21,19 @@ export class SalaDeAula implements IBase {
   @Column({ type: "varchar", length: 255 })
   nome: string;
 
-  @ManyToMany(() => Horario, (horario) => horario.salas_de_aula)
+  @ManyToMany(() => DiaDaSemana, (dia_da_semana) => dia_da_semana.salas_de_aula)
   @JoinTable({
-    name: "horarios_salas_de_aula",
+    name: "salas_de_aula_dias_da_semana",
     joinColumn: {
-      name: "horario_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
       name: "sala_de_aula_id",
       referencedColumnName: "id",
     },
+    inverseJoinColumn: {
+      name: "dia_da_semana_id",
+      referencedColumnName: "id",
+    }
   })
-  horarios: Horario[];
+  dias_da_semana: DiaDaSemana[];
 
   @ManyToOne(
     () => Estabelecimento,
