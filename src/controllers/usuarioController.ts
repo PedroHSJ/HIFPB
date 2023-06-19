@@ -3,6 +3,7 @@ import {
 UsuarioService
 } from "../services/usuarioService";
 import { NotFoundError } from "../helpers/api-erros";
+import { hash } from "bcrypt";
 
 export class UsuarioController{
   getAllUsuarioController = async (
@@ -41,7 +42,7 @@ export class UsuarioController{
     next: NextFunction
   ) => {
     try {
-      const { username } = req.query;
+      const { username } = req.params;
       const usuario = await new UsuarioService().getByUsernameUsuarioService(username as string);
       if (!usuario) throw new NotFoundError("Usuario não encontrado");
       res.status(200).send(usuario);
@@ -71,7 +72,14 @@ export class UsuarioController{
     const { id } = req.params;
     const usuario = await new UsuarioService().getByIdUsuarioService(id);
     if (!usuario) throw new NotFoundError("Usuario não encontrado");
-    res.status(201).send(usuario);
+    const usuarioBody = req.body;
+    if(usuarioBody.password){
+      const hashPassword = await hash(usuarioBody.password, 10);
+      usuarioBody.password = hashPassword;
+    }
+    usuarioBody.id = id;
+    const usuarioEditado = await new UsuarioService().putUsuarioService(req.body);
+    res.status(200).send(usuarioEditado);
   };
   
   deleteUsuarioController = async (

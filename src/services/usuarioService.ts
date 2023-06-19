@@ -18,6 +18,7 @@ export class UsuarioService {
   getByIdUsuarioService = async (id: string) => {
     if (!id) throw new BadResquestError("Id não informado");
     const usuario = await new UsuarioRepository().getByIdUsuarioRepository(id);
+    delete usuario?.password;
     return usuario;
   };
 
@@ -25,6 +26,7 @@ export class UsuarioService {
     if (!username) throw new BadResquestError("Username não informado");
     const usuarioEncontrado =
       await new UsuarioRepository().getByUsernameUsuarioRepository(username);
+    delete usuarioEncontrado?.password;
     return usuarioEncontrado;
   };
 
@@ -54,10 +56,10 @@ export class UsuarioService {
   putUsuarioService = async (usuario: Usuario) => {
     if (!usuario) throw new BadResquestError("Usuario não informado");
 
-    const newUsuario = await new UsuarioRepository().putUsuarioRepository(
+    const usuarioEditado = await new UsuarioRepository().putUsuarioRepository(
       usuario
     );
-    return newUsuario;
+    return usuarioEditado;
   };
 
   deleteUsuarioService = async (id: string) => {

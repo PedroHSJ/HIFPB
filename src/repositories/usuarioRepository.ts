@@ -14,7 +14,10 @@ export class UsuarioRepository {
 
   getByIdUsuarioRepository = async (id: string): Promise<Usuario | null> => {
     const repo = AppDataSource.getRepository(Usuario);
-    const usuario = await repo.findOne({ where: { id: id } });
+    const usuario = await repo.createQueryBuilder("usuario")
+      .leftJoinAndSelect("usuario.roles", "roles")
+      .where("usuario.id = :id", { id: id })
+      .getOne();
 
     return usuario ? usuario : null;
   };
@@ -23,9 +26,10 @@ export class UsuarioRepository {
     username: string
   ): Promise<Usuario | null> => {
     const repo = AppDataSource.getRepository(Usuario);
-    const usuarioEncontrado = await repo.findOne({
-      where: { username: username },
-    });
+    const usuarioEncontrado = await repo.createQueryBuilder("usuario")
+      .leftJoinAndSelect("usuario.roles", "roles")
+      .where("usuario.username = :username", { username: username })
+      .getOne();
     return usuarioEncontrado ? usuarioEncontrado : null;
   };
 
@@ -42,10 +46,9 @@ export class UsuarioRepository {
 
   putUsuarioRepository = async (usuario: Usuario): Promise<Usuario> => {
     const repo = AppDataSource.getRepository(Usuario);
-    const newUsuario = await repo.update(usuario.id, usuario);
-    return newUsuario.affected
-      ? ({ id: usuario.id } as Usuario)
-      : ({} as Usuario);
+    const newUsuario = await repo.save(usuario);
+    return { id: usuario.id } as Usuario;
+      
   };
 
   deleteUsuarioRepository = async (id: string): Promise<void> => {
