@@ -6,14 +6,17 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { Min } from "class-validator";
+import { Min, IsEmail, Validate } from "class-validator";
+import { UsernameValidation } from "../validations/Usuario/usernameValidation";
+import { IBase } from "../interfaces/IBase";
 
 @Entity("usuarios")
-export class Usuario {
+export class Usuario implements IBase {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({ type: "varchar", length: 64, unique: true })
+  @Validate(UsernameValidation)
   username: string;
 
   @Column({ type: "varchar", length: 64 })
@@ -25,4 +28,8 @@ export class Usuario {
 
   @UpdateDateColumn()
   data_alteracao: Date;
+
+  @Column({ type: "varchar", length: 255 })
+  @IsEmail()
+  email: string;
 }

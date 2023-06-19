@@ -5,11 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  BaseEntity,
 } from "typeorm";
 import { Interprete } from "./Interprete";
+import { IBase } from "../interfaces/IBase";
 
 @Entity("alunos")
-export class Aluno {
+export class Aluno implements IBase {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

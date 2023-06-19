@@ -8,9 +8,10 @@ import {
 } from "typeorm";
 import { Horario } from "./Horario";
 import { Aluno } from "./Aluno";
+import { IBase } from "../interfaces/IBase";
 
 @Entity("interpretes")
-export class Interprete {
+export class Interprete implements IBase {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

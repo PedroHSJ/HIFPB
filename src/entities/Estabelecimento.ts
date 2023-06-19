@@ -17,9 +17,10 @@ import {
   Min,
   MinLength,
 } from "class-validator";
+import { IBase } from "../interfaces/IBase";
 
 @Entity("estabelecimentos")
-export class Estabelecimento {
+export class Estabelecimento implements IBase {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

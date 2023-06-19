@@ -9,9 +9,10 @@ import {
 } from "typeorm";
 import { Interprete } from "./Interprete";
 import { SalaDeAula } from "./SalaDeAula";
+import { IBase } from "../interfaces/IBase";
 
 @Entity("horarios")
-export class Horario {
+export class Horario implements IBase {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

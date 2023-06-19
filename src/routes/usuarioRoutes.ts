@@ -1,17 +1,13 @@
 import { Router } from "express";
 import {
-  getAllUsuarioController,
-  getByIdUsuarioController,
-  postUsuarioController,
-  putUsuarioController,
-  deleteUsuarioController,
+  UsuarioController
 } from "../controllers/usuarioController";
 const usuarioRoutes = Router();
 
-usuarioRoutes.get("/", getAllUsuarioController);
-usuarioRoutes.get("/:id", getByIdUsuarioController);
-usuarioRoutes.post("/", postUsuarioController);
-usuarioRoutes.put("/:id", putUsuarioController);
-usuarioRoutes.delete("/:id", deleteUsuarioController);
+usuarioRoutes.get("/", new UsuarioController().getAllUsuarioController);
+usuarioRoutes.get("/:id", new UsuarioController().getByIdUsuarioController);
+usuarioRoutes.post("/", new UsuarioController().postUsuarioController);
+usuarioRoutes.put("/:id", new UsuarioController().putUsuarioController);
+usuarioRoutes.delete("/:id", new UsuarioController().deleteUsuarioController);
 
 export default usuarioRoutes;
