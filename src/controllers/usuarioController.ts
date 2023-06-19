@@ -73,12 +73,8 @@ export class UsuarioController{
     const usuario = await new UsuarioService().getByIdUsuarioService(id);
     if (!usuario) throw new NotFoundError("Usuario não encontrado");
     const usuarioBody = req.body;
-    if(usuarioBody.password){
-      const hashPassword = await hash(usuarioBody.password, 10);
-      usuarioBody.password = hashPassword;
-    }
     usuarioBody.id = id;
-    const usuarioEditado = await new UsuarioService().putUsuarioService(req.body);
+    const usuarioEditado = await new UsuarioService().putUsuarioService(usuarioBody);
     res.status(200).send(usuarioEditado);
   };
   

@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -30,6 +31,6 @@ export class Interprete implements IBase {
   @OneToMany(() => DiaDaSemana, (dia_da_semana) => dia_da_semana.interprete)
   dias_da_semana: DiaDaSemana[];
 
-  @OneToMany(() => Aluno, (aluno) => aluno.interprete)
+  @ManyToMany(() => Aluno, (aluno) => aluno.interprete)
   alunos: Aluno[];
 }

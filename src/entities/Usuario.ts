@@ -51,4 +51,7 @@ export class Usuario implements IBase {
     }
   })
   roles: Role[];
+
+  @Column({ type: "bit", default: 1 })
+  ativo: number;
 }

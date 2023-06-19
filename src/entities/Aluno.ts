@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   BaseEntity,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { Interprete } from "./Interprete";
 import { IBase } from "../interfaces/IBase";
@@ -27,6 +29,17 @@ export class Aluno implements IBase {
   @UpdateDateColumn()
   data_alteracao: Date;
 
-  @ManyToOne(() => Interprete, (interprete) => interprete.alunos)
-  interprete: Interprete;
+  @ManyToMany(() => Interprete, (interprete) => interprete.alunos)
+  @JoinTable({
+    name: "alunos_interpretes",
+    joinColumn: {
+      name: "aluno_id",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "interprete_id",
+      referencedColumnName: "id",
+    }
+  })
+  interprete: Interprete[];
 }

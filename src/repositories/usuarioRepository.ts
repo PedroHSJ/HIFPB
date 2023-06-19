@@ -53,6 +53,8 @@ export class UsuarioRepository {
 
   deleteUsuarioRepository = async (id: string): Promise<void> => {
     const repo = AppDataSource.getRepository(Usuario);
-    await repo.delete(id);
+    //soft delete
+    await repo.update(id, { ativo: 0 } as Usuario);
+    
   };
 }

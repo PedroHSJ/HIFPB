@@ -55,7 +55,10 @@ export class UsuarioService {
 
   putUsuarioService = async (usuario: Usuario) => {
     if (!usuario) throw new BadResquestError("Usuario não informado");
-
+    if(usuario.password){
+      const hashPassword = await hash(usuario.password, 10);
+      usuario.password = hashPassword;
+    }
     const usuarioEditado = await new UsuarioRepository().putUsuarioRepository(
       usuario
     );
