@@ -2,13 +2,18 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
-import { Min, IsEmail, Validate } from "class-validator";
+import { Min, IsEmail, Validate, MinLength } from "class-validator";
 import { UsernameValidation } from "../validations/Usuario/usernameValidation";
 import { IBase } from "../interfaces/IBase";
+import { Role } from "./Role";
 
 @Entity("usuarios")
 export class Usuario implements IBase {
@@ -20,8 +25,8 @@ export class Usuario implements IBase {
   username: string;
 
   @Column({ type: "varchar", length: 64 })
-  @Min(8)
-  password: string;
+  @MinLength(8)
+  password?: string;
 
   @CreateDateColumn()
   data_criacao: Date;
@@ -32,4 +37,18 @@ export class Usuario implements IBase {
   @Column({ type: "varchar", length: 255 })
   @IsEmail()
   email: string;
+
+  @ManyToMany(() => Role, (role) => role.usuarios)
+  @JoinTable({
+    name: "usuarios_roles",
+    joinColumn: {
+      name: "usuario_id",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "role_id",
+      referencedColumnName: "id",
+    }
+  })
+  roles: Role[];
 }

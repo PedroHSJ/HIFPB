@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/usuario", validateToken, usuarioRoutes);
+app.use("/usuario", usuarioRoutes);
 app.use("/auth", authRoutes);
 app.use("/estabelecimento", estabelecimentoRoutes);
 app.use("/salaDeAula", salaDeAulaRoutes);
