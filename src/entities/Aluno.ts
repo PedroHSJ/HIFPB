@@ -8,9 +8,11 @@ import {
   BaseEntity,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from "typeorm";
 import { Interprete } from "./Interprete";
 import { IBase } from "../interfaces/IBase";
+import { Aula } from "./Aula";	
 
 @Entity("alunos")
 export class Aluno implements IBase {
@@ -42,4 +44,7 @@ export class Aluno implements IBase {
     }
   })
   interprete: Interprete[];
+
+  @OneToMany(() => Aula, aula => aula.aluno)
+  aulas: Aula[];
 }

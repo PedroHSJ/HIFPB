@@ -2,14 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Interprete } from "./Interprete";
 import { SalaDeAula } from "./SalaDeAula";
 import { IBase } from "../interfaces/IBase";
+import { Aula } from "./Aula";	
 
 @Entity("dias_da_semana")
 export class DiaDaSemana implements IBase {
@@ -25,9 +28,6 @@ export class DiaDaSemana implements IBase {
   @UpdateDateColumn()
   data_alteracao: Date;
 
-  @ManyToOne(() => Interprete, (interprete) => interprete.dias_da_semana)
-  interprete: Interprete;
-
-  @ManyToMany(() => SalaDeAula, (sala_de_aula) => sala_de_aula.dias_da_semana)
-  salas_de_aula: SalaDeAula[];
+  @OneToMany(() => Aula, aula => aula.diasDaSemana)
+  aulas: Aula[];
 }

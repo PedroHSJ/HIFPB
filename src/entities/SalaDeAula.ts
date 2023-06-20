@@ -12,6 +12,7 @@ import {
 import { DiaDaSemana } from "./DiaDaSemana";
 import { Estabelecimento } from "./Estabelecimento";
 import { IBase } from "../interfaces/IBase";
+import { Aula } from "./Aula";
 
 @Entity("salas_de_aula")
 export class SalaDeAula implements IBase {
@@ -20,20 +21,6 @@ export class SalaDeAula implements IBase {
 
   @Column({ type: "varchar", length: 255 })
   nome: string;
-
-  @ManyToMany(() => DiaDaSemana, (dia_da_semana) => dia_da_semana.salas_de_aula)
-  @JoinTable({
-    name: "salas_de_aula_dias_da_semana",
-    joinColumn: {
-      name: "sala_de_aula_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "dia_da_semana_id",
-      referencedColumnName: "id",
-    }
-  })
-  dias_da_semana: DiaDaSemana[];
 
   @ManyToOne(
     () => Estabelecimento,
@@ -46,4 +33,7 @@ export class SalaDeAula implements IBase {
 
   @UpdateDateColumn()
   data_alteracao: Date;
+
+  @OneToMany(() => Aula, aula => aula.salaDeAula)
+  aulas: Aula[];
 }

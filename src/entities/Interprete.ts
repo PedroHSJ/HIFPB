@@ -10,6 +10,7 @@ import {
 import { DiaDaSemana } from "./DiaDaSemana";
 import { Aluno } from "./Aluno";
 import { IBase } from "../interfaces/IBase";
+import { SalaDeAula } from "./SalaDeAula";
 
 @Entity("interpretes")
 export class Interprete implements IBase {
@@ -27,9 +28,6 @@ export class Interprete implements IBase {
 
   @UpdateDateColumn()
   data_alteracao: Date;
-
-  @OneToMany(() => DiaDaSemana, (dia_da_semana) => dia_da_semana.interprete)
-  dias_da_semana: DiaDaSemana[];
 
   @ManyToMany(() => Aluno, (aluno) => aluno.interprete)
   alunos: Aluno[];
