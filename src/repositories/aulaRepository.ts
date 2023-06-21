@@ -4,6 +4,7 @@ import { Aula } from "../entities/Aula";
 export class AulaRepository{
     async post(aula: Aula): Promise<Aula>{
         const repo = AppDataSource.getRepository(Aula);
+        console.log(aula);
         const novaAula = await repo.save(aula);
         return {id: novaAula.id} as Aula;
     }

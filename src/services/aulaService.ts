@@ -4,10 +4,10 @@ import { AulaRepository } from "../repositories/aulaRepository";
 
 export class AulaService{
     async post(aula: Aula): Promise<Aula>{
-        aula.validate();
-        if(!aula.valide){
-            throw new BadResquestError("Dados inválidos.")
-        }
+        // aula.validate();
+        // if(!aula.valide){
+        //     throw new BadResquestError("Dados inválidos.")
+        // }
         const novaAula = await new AulaRepository().post(aula);
         return novaAula
     }

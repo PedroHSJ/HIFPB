@@ -34,6 +34,6 @@ export class SalaDeAula implements IBase {
   @UpdateDateColumn()
   data_alteracao: Date;
 
-  @OneToMany(() => Aula, aula => aula.salaDeAula)
+  @OneToMany(() => Aula, aula => aula.sala_de_aula)
   aulas: Aula[];
 }

@@ -3,15 +3,13 @@ import { AulaService } from "../services/aulaService";
 import { Aula } from "../entities/Aula";
 
 export class AulaController{
-    async post(
-        res: Response, 
-        req: Request, 
-        next: NextFunction){
+    async post(req: Request, res: Response, next: NextFunction) {
+
         try{
-        const aula = req.body as Aula;
+        const aula = req.body;
         const novaAula = await new AulaService().post(aula);
-        res.send(200).json(novaAula);
-        }
+        res.status(201).send(novaAula);
+    }
         catch(error){
             next(error);
         }

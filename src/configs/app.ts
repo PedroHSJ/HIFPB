@@ -6,6 +6,7 @@ import {
   usuarioRoutes,
   salaDeAulaRoutes,
   interpreteRoutes,
+  aulaRoutes,
 } from "../routes";
 import { errorMiddleware } from "../middlewares/error";
 import validateToken from "../middlewares/authMiddleware";
@@ -27,6 +28,7 @@ app.use("/estabelecimento", estabelecimentoRoutes);
 app.use("/salaDeAula", salaDeAulaRoutes);
 app.use("/aluno", alunoRoutes)
 app.use("/interprete", interpreteRoutes)
+app.use("/aula", aulaRoutes)
 
 //Interceptando erros
 app.use(errorMiddleware);

@@ -1,4 +1,5 @@
 import { alunoRoutes } from "./alunoRoutes";
+import { aulaRoutes } from "./aulaRoutes";
 import authRoutes from "./authRoutes";
 import { estabelecimentoRoutes } from "./estabelecimentoRoutes";
 import { interpreteRoutes } from "./interpreteRoutes";
@@ -12,4 +13,5 @@ export {
   estabelecimentoRoutes,
   salaDeAulaRoutes,
   interpreteRoutes,
+  aulaRoutes
 };

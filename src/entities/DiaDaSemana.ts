@@ -28,6 +28,6 @@ export class DiaDaSemana implements IBase {
   @UpdateDateColumn()
   data_alteracao: Date;
 
-  @OneToMany(() => Aula, aula => aula.diasDaSemana)
+  @OneToMany(() => Aula, aula => aula.dia_da_semana)
   aulas: Aula[];
 }
