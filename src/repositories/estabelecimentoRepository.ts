@@ -7,7 +7,7 @@ export class EstabelecimentoRepository {
     const repo = AppDataSource.getRepository(Estabelecimento);
     //JOIN COM A TABELA salas_de_aula
     const estabelecimentos = await repo.createQueryBuilder("estabelecimentos")
-    .innerJoinAndSelect("estabelecimentos.salas_de_aula", "salasDeAula")
+    .leftJoinAndSelect("estabelecimentos.salas_de_aula", "salasDeAula")
     .getMany();
     return estabelecimentos;
   }
