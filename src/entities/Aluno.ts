@@ -13,9 +13,12 @@ import {
 import { Interprete } from "./Interprete";
 import { IBase } from "../interfaces/IBase";
 import { Aula } from "./Aula";	
+import { Role } from "./Role";
+import { IUsuario } from "../interfaces/IUsuario";
 
 @Entity("alunos")
 export class Aluno implements IBase {
+  
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -47,4 +50,5 @@ export class Aluno implements IBase {
 
   @OneToMany(() => Aula, aula => aula.aluno)
   aulas: Aula[];
+
 }

@@ -11,9 +11,10 @@ import { DiaDaSemana } from "./DiaDaSemana";
 import { Aluno } from "./Aluno";
 import { IBase } from "../interfaces/IBase";
 import { SalaDeAula } from "./SalaDeAula";
+import { IUsuario } from "../interfaces/IUsuario";
 
 @Entity("interpretes")
-export class Interprete implements IBase {
+export class Interprete implements IBase{
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

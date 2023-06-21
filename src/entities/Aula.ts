@@ -32,9 +32,15 @@ export class Aula implements IBase {
 
   @ManyToOne(() => DiaDaSemana)
   @JoinColumn({ name: 'dias_da_semana_id', referencedColumnName: 'id' })
-  diasDaSemana: DiaDaSemana;
+  diaDaSemana: DiaDaSemana;
 
   @ManyToOne(() => SalaDeAula)
   @JoinColumn({ name: 'sala_de_aula_id', referencedColumnName: 'id' })
   salaDeAula: SalaDeAula;
+
+  valide: boolean;
+
+  validate(): boolean{
+    return this.diaDaSemana.id && this.aluno.id && this.salaDeAula.id ? true : false;
+  }
 }
