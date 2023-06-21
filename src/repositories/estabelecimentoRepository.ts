@@ -7,8 +7,8 @@ export class EstabelecimentoRepository {
     const repo = AppDataSource.getRepository(Estabelecimento);
     //JOIN COM A TABELA salas_de_aula
     const estabelecimentos = await repo.createQueryBuilder("estabelecimentos")
-    .innerJoinAndSelect(SalaDeAula, 'salas_de_aula', 'salas_de_aula.estabelecimentoId = estabelecimentos.id')
-      .getMany();
+    .innerJoinAndSelect("estabelecimentos.salas_de_aula", "salasDeAula")
+    .getMany();
     return estabelecimentos;
   }
   async post(estabelecimento: Estabelecimento): Promise<Estabelecimento> {
