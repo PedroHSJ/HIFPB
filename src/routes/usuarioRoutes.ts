@@ -12,4 +12,4 @@ usuarioRoutes.post("/", new UsuarioController().postUsuarioController);
 usuarioRoutes.put("/:id", new UsuarioController().putUsuarioController);
 usuarioRoutes.delete("/:id", new UsuarioController().deleteUsuarioController);
 
-export default usuarioRoutes;
+export {usuarioRoutes};

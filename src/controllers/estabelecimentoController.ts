@@ -20,9 +20,7 @@ export class EstabelecimentoController {
   async post(req: Request, res: Response, next: NextFunction) {
     try {
       const estabelecimentoClass = plainToClass(Estabelecimento, req.body);
-      const errors = await validate(estabelecimentoClass);
-      if (errors.length > 0) res.status(400).send(errors);
-      console.log(errors);
+     
       const novoEstabelecimento = await new EstabelecimentoService().post(
         estabelecimentoClass
       );

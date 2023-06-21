@@ -1,3 +1,5 @@
+import { ValidationError } from "class-validator";
+
 export class ApiError extends Error {
   public readonly statusCode: number;
   constructor(statusCode: number, message: string) {
@@ -9,6 +11,12 @@ export class ApiError extends Error {
 export class BadResquestError extends ApiError {
   constructor(message: string) {
     super(400, message);
+  }
+}
+
+export class ValidationApiError extends ApiError {
+  constructor(errors: Array<ValidationError>) {
+    super(400, JSON.stringify(errors));
   }
 }
 
@@ -37,10 +45,4 @@ interface IValidationError {
   children?: ValidationError[];
   constraints: { [type: string]: string };
 }
-export class ValidationError implements IValidationError {
-  target?: Object | undefined;
-  value?: any;
-  property: string;
-  children?: ValidationError[] | undefined;
-  constraints: { [type: string]: string };
-}
+

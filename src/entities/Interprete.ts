@@ -20,7 +20,7 @@ export class Interprete implements IBase {
   @Column({ type: "varchar", length: 255 })
   nome: string;
 
-  @Column({ type: "char", length: 11 })
+  @Column({ type: "char", length: 11, unique: true })
   cpf: string;
 
   @CreateDateColumn()
