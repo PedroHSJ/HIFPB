@@ -40,14 +40,14 @@
 
 ## aulas (Aula)
 
-| Name              | Name of Entity | Type      | Nullable | Attribute Key | Comment |
-| :---------------- | :------------- | :-------- | :------: | :-----------: | :------ |
-| id                | id             | uuid      |          |      PK       |         |
-| aluno_id          | aluno          | uuid      | nullable |      FK       |         |
-| dias_da_semana_id | diasDaSemana   | uuid      | nullable |      FK       |         |
-| sala_de_aula_id   | salaDeAula     | uuid      | nullable |      FK       |         |
-| data_criacao      | data_criacao   | timestamp |          |               |         |
-| data_alteracao    | data_alteracao | timestamp |          |               |         |
+| Name             | Name of Entity | Type      | Nullable | Attribute Key | Comment |
+| :--------------- | :------------- | :-------- | :------: | :-----------: | :------ |
+| id               | id             | uuid      |          |      PK       |         |
+| aluno_id         | aluno          | uuid      |          |      FK       |         |
+| dia_da_semana_id | dia_da_semana  | uuid      |          |      FK       |         |
+| sala_de_aula_id  | sala_de_aula   | uuid      |          |      FK       |         |
+| data_criacao     | data_criacao   | timestamp |          |               |         |
+| data_alteracao   | data_alteracao | timestamp |          |               |         |
 
 ## dias_da_semana (DiaDaSemana)
 

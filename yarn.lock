@@ -3153,6 +3153,11 @@ typed-function@^4.1.0:
   resolved "https://registry.npmjs.org/typed-function/-/typed-function-4.1.0.tgz"
   integrity sha512-DGwUl6cioBW5gw2L+6SMupGwH/kZOqivy17E4nsh1JI9fKF87orMmlQx3KISQPmg3sfnOUGlwVkroosvgddrlg==
 
+typedi@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/typedi/-/typedi-0.10.0.tgz#e8f9a5ee100b84addbdfb57fe90d8d9ed2a21dea"
+  integrity sha512-v3UJF8xm68BBj6AF4oQML3ikrfK2c9EmZUyLOfShpJuItAqVBHWP/KtpGinkSsIiP6EZyyb6Z3NXyW9dgS9X1w==
+
 typeorm-extension@^2.8.1:
   version "2.8.1"
   resolved "https://registry.npmjs.org/typeorm-extension/-/typeorm-extension-2.8.1.tgz"

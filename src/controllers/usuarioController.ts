@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import {
-UsuarioService
-} from "../services/usuarioService";
+import { UsuarioService } from "../services/usuarioService";
 import { NotFoundError } from "../helpers/api-erros";
 import { hash } from "bcrypt";
+import { Service } from "typedi";
 
-export class UsuarioController{
+@Service()
+export class UsuarioController {
   getAllUsuarioController = async (
     req: Request,
     res: Response,
@@ -20,7 +20,7 @@ export class UsuarioController{
       next(error);
     }
   };
-  
+
   getByIdUsuarioController = async (
     req: Request,
     res: Response,
@@ -35,7 +35,7 @@ export class UsuarioController{
       next(error);
     }
   };
-  
+
   getByUsernameUsuarioController = async (
     req: Request,
     res: Response,
@@ -43,14 +43,16 @@ export class UsuarioController{
   ) => {
     try {
       const { username } = req.params;
-      const usuario = await new UsuarioService().getByUsernameUsuarioService(username as string);
+      const usuario = await new UsuarioService().getByUsernameUsuarioService(
+        username as string
+      );
       if (!usuario) throw new NotFoundError("Usuario não encontrado");
       res.status(200).send(usuario);
     } catch (error) {
       next(error);
     }
   };
-  
+
   postUsuarioController = async (
     req: Request,
     res: Response,
@@ -63,7 +65,7 @@ export class UsuarioController{
       next(error);
     }
   };
-  
+
   putUsuarioController = async (
     req: Request,
     res: Response,
@@ -74,10 +76,12 @@ export class UsuarioController{
     if (!usuario) throw new NotFoundError("Usuario não encontrado");
     const usuarioBody = req.body;
     usuarioBody.id = id;
-    const usuarioEditado = await new UsuarioService().putUsuarioService(usuarioBody);
+    const usuarioEditado = await new UsuarioService().putUsuarioService(
+      usuarioBody
+    );
     res.status(200).send(usuarioEditado);
   };
-  
+
   deleteUsuarioController = async (
     req: Request,
     res: Response,

@@ -36,9 +36,9 @@ salas_de_aula {
 
 aulas {
   uuid id PK "not null"
-  uuid aluno_id FK "nullable"
-  uuid dias_da_semana_id FK "nullable"
-  uuid sala_de_aula_id FK "nullable"
+  uuid aluno_id FK "not null"
+  uuid dia_da_semana_id FK "not null"
+  uuid sala_de_aula_id FK "not null"
   timestamp data_criacao "not null"
   timestamp data_alteracao "not null"
 }
@@ -78,12 +78,12 @@ usuarios_roles {
 roles }o--o{ usuarios: usuarios_roles
 roles ||--|{ usuarios_roles: ""
 usuarios ||--|{ usuarios_roles: ""
-aulas }o--o| alunos: "aluno_id"
+aulas }|--|| alunos: "aluno_id"
 alunos ||--|{ alunos_interpretes: ""
 alunos }o--o{ interpretes: alunos_interpretes
 interpretes ||--|{ alunos_interpretes: ""
-aulas }o--o| salas_de_aula: "sala_de_aula_id"
-dias_da_semana |o--o{ aulas: "dias_da_semana_id"
+aulas }|--|| salas_de_aula: "sala_de_aula_id"
+dias_da_semana |o--|{ aulas: "dia_da_semana_id"
 salas_de_aula }o--o| estabelecimentos: "estabelecimentoId"
 ```
 
@@ -124,9 +124,9 @@ salas_de_aula {
 
 aulas {
   uuid id PK "not null"
-  uuid aluno_id FK "nullable"
-  uuid dias_da_semana_id FK "nullable"
-  uuid sala_de_aula_id FK "nullable"
+  uuid aluno_id FK "not null"
+  uuid dia_da_semana_id FK "not null"
+  uuid sala_de_aula_id FK "not null"
   timestamp data_criacao "not null"
   timestamp data_alteracao "not null"
 }
@@ -166,11 +166,11 @@ usuarios_roles {
 roles }o--o{ usuarios: usuarios_roles
 roles ||--|{ usuarios_roles: ""
 usuarios ||--|{ usuarios_roles: ""
-aulas }o--o| alunos: "aluno_id"
+aulas }|--|| alunos: "aluno_id"
 alunos ||--|{ alunos_interpretes: ""
 alunos }o--o{ interpretes: alunos_interpretes
 interpretes ||--|{ alunos_interpretes: ""
-aulas }o--o| salas_de_aula: "sala_de_aula_id"
-dias_da_semana |o--o{ aulas: "dias_da_semana_id"
+aulas }|--|| salas_de_aula: "sala_de_aula_id"
+dias_da_semana |o--|{ aulas: "dia_da_semana_id"
 salas_de_aula }o--o| estabelecimentos: "estabelecimentoId"
 ```

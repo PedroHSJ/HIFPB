@@ -26,15 +26,15 @@ export class Aula implements IBase {
   @UpdateDateColumn()
   data_alteracao: Date;
 
-  @ManyToOne(() => Aluno)
+  @ManyToOne(() => Aluno, {nullable: false})
   @JoinColumn({ name: 'aluno_id', referencedColumnName: 'id' })
   aluno: Aluno;
 
-  @ManyToOne(() => DiaDaSemana)
+  @ManyToOne(() => DiaDaSemana, {nullable: false})
   @JoinColumn({ name: 'dia_da_semana_id', referencedColumnName: 'id' })
   dia_da_semana: DiaDaSemana;
 
-  @ManyToOne(() => SalaDeAula)
+  @ManyToOne(() => SalaDeAula, {nullable: false})
   @JoinColumn({ name: 'sala_de_aula_id', referencedColumnName: 'id' })
   sala_de_aula: SalaDeAula;
 
