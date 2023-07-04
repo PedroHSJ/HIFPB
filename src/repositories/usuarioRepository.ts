@@ -1,20 +1,28 @@
+import { Service } from "typedi";
 import { AppDataSource } from "../data-source";
 import { Role } from "../entities/Role";
 import { Usuario } from "../entities/Usuario";
+import { Repository } from "typeorm";
+import { IUsuarioRepository } from "./interfaces/IUsuarioRepository";
+@Service()
+export class UsuarioRepository implements IUsuarioRepository {
 
-export class UsuarioRepository {
-  getAllUsuariosRepository = async (): Promise<Usuario[]> => {
-    const repo = AppDataSource.getRepository(Usuario);
-    const usuarios = await repo
+  repo: Repository<Usuario>;
+
+  constructor() {
+    this.repo = AppDataSource.getRepository(Usuario);
+  }
+
+  getAll = async (): Promise<Usuario[]> => {
+    const usuarios = await this.repo
       .createQueryBuilder("usuario")
       .leftJoinAndSelect("usuario.roles", "roles")
       .getMany();
     return usuarios;
   };
 
-  getByIdUsuarioRepository = async (id: string): Promise<Usuario | null> => {
-    const repo = AppDataSource.getRepository(Usuario);
-    const usuario = await repo.createQueryBuilder("usuario")
+  getById = async (id: string): Promise<Usuario | null> => {
+    const usuario = await this.repo.createQueryBuilder("usuario")
       .leftJoinAndSelect("usuario.roles", "roles")
       .where("usuario.id = :id", { id: id })
       .getOne();
@@ -22,20 +30,19 @@ export class UsuarioRepository {
     return usuario ? usuario : null;
   };
 
-  getByUsernameUsuarioRepository = async (
+  getByUsername = async (
     username: string
   ): Promise<Usuario | null> => {
-    const repo = AppDataSource.getRepository(Usuario);
-    const usuarioEncontrado = await repo.createQueryBuilder("usuario")
+    const usuarioEncontrado = await this.repo.createQueryBuilder("usuario")
       .leftJoinAndSelect("usuario.roles", "roles")
       .where("usuario.username = :username", { username: username })
       .getOne();
     return usuarioEncontrado ? usuarioEncontrado : null;
   };
 
-  postUsuarioRepository = async (usuario: Usuario): Promise<Usuario> => {
-    const repo = AppDataSource.getRepository(Usuario);
-    const newUsuario = await repo.save(usuario);
+  post = async (usuario: Usuario): Promise<Usuario> => {
+    
+    const newUsuario = await this.repo.save(usuario);
 
     const repoRole = AppDataSource.getRepository(Role);
     usuario.roles?.forEach(role => {
@@ -44,17 +51,17 @@ export class UsuarioRepository {
     return { id: newUsuario.id } as Usuario;
   };
 
-  putUsuarioRepository = async (usuario: Usuario): Promise<Usuario> => {
-    const repo = AppDataSource.getRepository(Usuario);
-    const newUsuario = await repo.save(usuario);
+  put = async (usuario: Usuario): Promise<Usuario> => {
+    
+    const newUsuario = await this.repo.save(usuario);
     return { id: usuario.id } as Usuario;
       
   };
 
-  deleteUsuarioRepository = async (id: string): Promise<void> => {
-    const repo = AppDataSource.getRepository(Usuario);
+  delete = async (id: string): Promise<void> => {
+    
     //soft delete
-    await repo.update(id, { ativo: 0 } as Usuario);
+    await this.repo.update(id, { ativo: 0 } as Usuario);
     
   };
 }

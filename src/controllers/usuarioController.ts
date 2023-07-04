@@ -2,17 +2,24 @@ import { NextFunction, Request, Response } from "express";
 import { UsuarioService } from "../services/usuarioService";
 import { NotFoundError } from "../helpers/api-erros";
 import { hash } from "bcrypt";
-import { Service } from "typedi";
+import { Inject, Service } from "typedi";
+import { IUsuarioService } from "../services/interfaces/IUsuarioService";
 
 @Service()
 export class UsuarioController {
-  getAllUsuarioController = async (
+
+  private _usuarioService: IUsuarioService;
+
+  constructor(@Inject() usuarioService: UsuarioService) {
+    this._usuarioService = usuarioService;
+  }
+  getAll = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     try {
-      const usuarios = await new UsuarioService().getAllUsuariosService();
+      const usuarios = await this._usuarioService.getAll();
       if (usuarios.length === 0)
         return res.status(204).send("Não há usuarios cadastrados");
       res.status(200).send(usuarios);
@@ -21,14 +28,14 @@ export class UsuarioController {
     }
   };
 
-  getByIdUsuarioController = async (
+  getById = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     try {
       const { id } = req.params;
-      const usuario = await new UsuarioService().getByIdUsuarioService(id);
+      const usuario = await this._usuarioService.getById(id);
       if (!usuario) throw new NotFoundError("Usuario não encontrado");
       res.status(200).send(usuario);
     } catch (error) {
@@ -36,14 +43,14 @@ export class UsuarioController {
     }
   };
 
-  getByUsernameUsuarioController = async (
+  getByUsername = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     try {
       const { username } = req.params;
-      const usuario = await new UsuarioService().getByUsernameUsuarioService(
+      const usuario = await this._usuarioService.getByUsername(
         username as string
       );
       if (!usuario) throw new NotFoundError("Usuario não encontrado");
@@ -53,42 +60,42 @@ export class UsuarioController {
     }
   };
 
-  postUsuarioController = async (
+  post = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     try {
-      const usuario = await new UsuarioService().postUsuarioService(req.body);
+      const usuario = await this._usuarioService.post(req.body);
       res.status(201).send(usuario);
     } catch (error) {
       next(error);
     }
   };
 
-  putUsuarioController = async (
+  put = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     const { id } = req.params;
-    const usuario = await new UsuarioService().getByIdUsuarioService(id);
+    const usuario = await this._usuarioService.getById(id);
     if (!usuario) throw new NotFoundError("Usuario não encontrado");
     const usuarioBody = req.body;
     usuarioBody.id = id;
-    const usuarioEditado = await new UsuarioService().putUsuarioService(
+    const usuarioEditado = await this._usuarioService.put(
       usuarioBody
     );
     res.status(200).send(usuarioEditado);
   };
 
-  deleteUsuarioController = async (
+  delete = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     const { id } = req.params;
-    const usuario = await new UsuarioService().deleteUsuarioService(id);
+    const usuario = await this._usuarioService.delete(id);
     res.status(200).send("Usuário excluído com sucesso");
   };
 }

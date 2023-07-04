@@ -10,8 +10,6 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { Min, IsEmail, Validate, MinLength } from "class-validator";
-import { UsernameValidation } from "../validations/Usuario/usernameValidation";
 import { IBase } from "../interfaces/IBase";
 import { Role } from "./Role";
 
@@ -21,11 +19,9 @@ export class Usuario implements IBase {
   id: string;
 
   @Column({ type: "varchar", length: 64, unique: true })
-  @Validate(UsernameValidation)
   username: string;
 
   @Column({ type: "varchar", length: 64 })
-  @MinLength(8)
   password?: string;
 
   @CreateDateColumn()
@@ -35,7 +31,6 @@ export class Usuario implements IBase {
   data_alteracao: Date;
 
   @Column({ type: "varchar", length: 255 })
-  @IsEmail()
   email: string;
 
   @ManyToMany(() => Role, (role) => role.usuarios)

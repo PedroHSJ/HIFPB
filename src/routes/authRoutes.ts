@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { auth } from "../controllers/security/authController";
+import Container from "typedi";
+import { AuthController } from "../controllers/security/authController";
 
 const authRoutes = Router();
-
-authRoutes.post("/", auth);
+const authController = Container.get(AuthController);
+authRoutes.post("/", authController.auth.bind(authController));
 
 export default authRoutes;

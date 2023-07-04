@@ -4,10 +4,21 @@ import { BadResquestError } from "../helpers/api-erros";
 import { UsuarioRepository } from "../repositories/usuarioRepository";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
+import { Inject, Service } from "typedi";
+import { IUsuarioService } from "./interfaces/IUsuarioService";
+import { IUsuarioRepository } from "../repositories/interfaces/IUsuarioRepository";
 
-export class UsuarioService {
-  getAllUsuariosService = async (): Promise<Usuario[]> => {
-    const usuarios = await new UsuarioRepository().getAllUsuariosRepository();
+
+@Service()
+export class UsuarioService implements IUsuarioService {
+  private _usuarioRepository: IUsuarioRepository;
+
+  constructor(@Inject() usuarioRepository: UsuarioRepository) {
+    this._usuarioRepository = usuarioRepository;
+  }
+
+  getAll = async (): Promise<Usuario[]> => {
+    const usuarios = await this._usuarioRepository.getAll();
     //Removendo a senha do retorno
     usuarios.forEach((usuario) => {
       delete usuario.password;
@@ -15,26 +26,26 @@ export class UsuarioService {
     return usuarios;
   };
 
-  getByIdUsuarioService = async (id: string) => {
+  getById = async (id: string) => {
     if (!id) throw new BadResquestError("Id não informado");
-    const usuario = await new UsuarioRepository().getByIdUsuarioRepository(id);
+    const usuario = await this._usuarioRepository.getById(id);
     delete usuario?.password;
     return usuario;
   };
 
-  getByUsernameUsuarioService = async (username: string) => {
+  getByUsername = async (username: string) => {
     if (!username) throw new BadResquestError("Username não informado");
     const usuarioEncontrado =
-      await new UsuarioRepository().getByUsernameUsuarioRepository(username);
+      await this._usuarioRepository.getByUsername(username);
     delete usuarioEncontrado?.password;
     return usuarioEncontrado;
   };
 
-  postUsuarioService = async (usuario: Usuario) => {
+  post = async (usuario: Usuario) => {
     if (!usuario) throw new BadResquestError("Usuario não informado");
     if(!usuario.password) throw new BadResquestError("Senha não informada");
     const usuarioExistente =
-      await new UsuarioRepository().getByUsernameUsuarioRepository(
+      await this._usuarioRepository.getByUsername(
         usuario.username
       );
     if (usuarioExistente) throw new BadResquestError("Usuario já cadastrado");
@@ -47,28 +58,28 @@ export class UsuarioService {
     if (errorsValidation.length > 0)
       throw new BadResquestError(errorsValidation.toString());
 
-    const newUsuario = await new UsuarioRepository().postUsuarioRepository(
+    const newUsuario = await this._usuarioRepository.post(
       usuario
     );
     return newUsuario;
   };
 
-  putUsuarioService = async (usuario: Usuario) => {
+  put = async (usuario: Usuario) => {
     if (!usuario) throw new BadResquestError("Usuario não informado");
     if(usuario.password){
       const hashPassword = await hash(usuario.password, 10);
       usuario.password = hashPassword;
     }
-    const usuarioEditado = await new UsuarioRepository().putUsuarioRepository(
+    const usuarioEditado = await this._usuarioRepository.put(
       usuario
     );
     return usuarioEditado;
   };
 
-  deleteUsuarioService = async (id: string) => {
+  delete = async (id: string) => {
     if (!id) throw new BadResquestError("Id não informado");
-    const usuario = await new UsuarioRepository().getByIdUsuarioRepository(id);
+    const usuario = await this._usuarioRepository.getById(id);
     if (!usuario) throw new BadResquestError("Usuario não encontrado");
-    await new UsuarioRepository().deleteUsuarioRepository(id);
+    await this._usuarioRepository.delete(id);
   };
 }
