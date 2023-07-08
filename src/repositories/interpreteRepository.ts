@@ -17,11 +17,8 @@ export class InterpreteRepository implements IInterpreteRepository {
 
         const interpreteAtual = await this.getById(id);
         const updateResult = await this.repo.update(id, { nome, cpf });
-        console.log('alunos', alunos);
-        console.log('interpreteAtual', interpreteAtual);
         if (updateResult.affected) {
             // Se há alunos, faz a associação many-to-many separadamente
-            console.log('alunos', alunos);
             await this.repo
                 .createQueryBuilder()
                 .relation(Interprete, 'alunos')
@@ -29,7 +26,7 @@ export class InterpreteRepository implements IInterpreteRepository {
                 .addAndRemove(alunos ? alunos : [], interpreteAtual?.alunos);
         }
 
-        return updateResult.affected ? updateResult.affected : 0;
+        return updateResult.affected ?? 0;
     }
 
     async post(interprete: Interprete): Promise<Interprete> {

@@ -69,10 +69,11 @@ export class InterpreteController {
             const interprete = req.body as InterpreteDTO;
             const id = req.params.id;
             const rows = await this._interpreteService.put(interprete, id);
-            if (rows === 0) {
-                res.status(404).send('Interprete não encontrado');
-            }
-            rows === 1 ? res.status(200).send() : res.status(204).send();
+            if (rows === 0)
+                res.status(400).send({ message: 'Erro ao editar interprete.' });
+            res.status(200).send({
+                message: 'Interprete editado com sucesso.',
+            });
         } catch (error) {
             next(error);
         }
