@@ -1,24 +1,43 @@
+import { Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { Interprete } from "../entities/Interprete";
+import { IInterpreteRepository } from "./interfaces/IInterpreteRepository";
+import { Service } from "typedi";
 
-export class InterpreteRepository{
-    async post(interprete: Interprete): Promise<Interprete>{
-        const repo = AppDataSource.getRepository(Interprete);
-        const novoInterprete = await repo.save(interprete);
-        return {id: novoInterprete.id} as Interprete;
-    }
+@Service()
+export class InterpreteRepository implements IInterpreteRepository {
+  repo: Repository<Interprete>;
 
-    async getByCpf(cpf: string): Promise<Interprete | null>{
-        const repo = AppDataSource.getRepository(Interprete);
-        const interprete = await repo.findOneBy({cpf: cpf});
-        return interprete ? interprete : null;
-    }
+  constructor() {
+    this.repo = AppDataSource.getRepository(Interprete);
+  }
+  async put(interprete: Interprete, id: string): Promise<number> {
+    console.log(interprete);
+    const update = await this.repo.update(id, interprete);
+    console.log(update.affected);
+    return update.affected ?? 0;
+  }
 
-    async getAll(): Promise<Interprete[]>{
-        const repo = AppDataSource.getRepository(Interprete);
-        const interpretes = await repo.createQueryBuilder("interpretes")
-        .innerJoinAndSelect("interpretes.alunos", "alunos")
-        .getMany();
-        return interpretes;
-    }
+  async post(interprete: Interprete): Promise<Interprete> {
+    const novoInterprete = await this.repo.save(interprete);
+    return { id: novoInterprete.id } as Interprete;
+  }
+
+  async getByCpf(cpf: string): Promise<Interprete | null> {
+    const interprete = await this.repo.findOneBy({ cpf: cpf });
+    return interprete ? interprete : null;
+  }
+
+  async getAll(): Promise<Interprete[]> {
+    const interpretes = await this.repo
+      .createQueryBuilder("interpretes")
+      .leftJoinAndSelect("interpretes.alunos", "alunos")
+      .getMany();
+    return interpretes;
+  }
+
+  async getById(id: string): Promise<Interprete | null> {
+    const interprete = await this.repo.findOneBy({ id: id });
+    return interprete ? interprete : null;
+  }
 }

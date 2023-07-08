@@ -1,16 +1,22 @@
 import { NextFunction, Request, Response } from "express";
-import { ApiError } from "../helpers/api-erros";
+import * as Yup from "yup";
 
-export const errorMiddleware = (
-  error: Error & Partial<ApiError>,
+export function errorMiddleware(
+  error: any,
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   const statusCode = error.statusCode ?? 500;
-  const message =
-    error.statusCode != 500 ? error.message : "Erro interno do servidor";
-  return res.status(statusCode).json({
-    message: message,
-  });
-};
+  const message = error.message ?? "Internal Server Error";
+
+  if (error instanceof Yup.ValidationError) {
+    const errors: any = {};
+    error.inner.forEach((err: any) => {
+      errors[err.path] = err.errors;
+    });
+    return res.status(400).json({ message: "Erro de validação.", errors });
+  }
+
+  res.status(statusCode).json({ message });
+}

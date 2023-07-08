@@ -8,7 +8,6 @@ import { Inject, Service } from "typedi";
 import { IUsuarioService } from "./interfaces/IUsuarioService";
 import { IUsuarioRepository } from "../repositories/interfaces/IUsuarioRepository";
 
-
 @Service()
 export class UsuarioService implements IUsuarioService {
   private _usuarioRepository: IUsuarioRepository;
@@ -35,19 +34,19 @@ export class UsuarioService implements IUsuarioService {
 
   getByUsername = async (username: string) => {
     if (!username) throw new BadResquestError("Username não informado");
-    const usuarioEncontrado =
-      await this._usuarioRepository.getByUsername(username);
-    delete usuarioEncontrado?.password;
+    const usuarioEncontrado = await this._usuarioRepository.getByUsername(
+      username
+    );
+    //delete usuarioEncontrado?.password;
     return usuarioEncontrado;
   };
 
   post = async (usuario: Usuario) => {
     if (!usuario) throw new BadResquestError("Usuario não informado");
-    if(!usuario.password) throw new BadResquestError("Senha não informada");
-    const usuarioExistente =
-      await this._usuarioRepository.getByUsername(
-        usuario.username
-      );
+    if (!usuario.password) throw new BadResquestError("Senha não informada");
+    const usuarioExistente = await this._usuarioRepository.getByUsername(
+      usuario.username
+    );
     if (usuarioExistente) throw new BadResquestError("Usuario já cadastrado");
     const hashPassword = await hash(usuario.password, 10);
     usuario.password = hashPassword;
@@ -58,21 +57,17 @@ export class UsuarioService implements IUsuarioService {
     if (errorsValidation.length > 0)
       throw new BadResquestError(errorsValidation.toString());
 
-    const newUsuario = await this._usuarioRepository.post(
-      usuario
-    );
+    const newUsuario = await this._usuarioRepository.post(usuario);
     return newUsuario;
   };
 
   put = async (usuario: Usuario) => {
     if (!usuario) throw new BadResquestError("Usuario não informado");
-    if(usuario.password){
+    if (usuario.password) {
       const hashPassword = await hash(usuario.password, 10);
       usuario.password = hashPassword;
     }
-    const usuarioEditado = await this._usuarioRepository.put(
-      usuario
-    );
+    const usuarioEditado = await this._usuarioRepository.put(usuario);
     return usuarioEditado;
   };
 

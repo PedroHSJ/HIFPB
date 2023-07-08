@@ -1,10 +1,18 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import { SalaDeAulaController } from "../controllers/salaDeAulaController";
+import { SalaDeAulaController } from '../controllers/salaDeAulaController';
+import Container from 'typedi';
 
 const salaDeAulaRoutes = Router();
+const salaDeAulaController = Container.get(SalaDeAulaController);
 
-salaDeAulaRoutes.get("/", new SalaDeAulaController().getAll);
-salaDeAulaRoutes.post("/", new SalaDeAulaController().post);
+salaDeAulaRoutes.get(
+    '/',
+    salaDeAulaController.getAll.bind(salaDeAulaController)
+);
+salaDeAulaRoutes.post(
+    '/',
+    salaDeAulaController.post.bind(salaDeAulaController)
+);
 
 export { salaDeAulaRoutes };

@@ -1,6 +1,10 @@
 import { compare } from "bcrypt";
 import { Auth } from "../entities/security/Auth";
-import { ApiError, BadResquestError, NotFoundError } from "../helpers/api-erros";
+import {
+  ApiError,
+  BadResquestError,
+  NotFoundError,
+} from "../helpers/api-erros";
 import { UsuarioService } from "./usuarioService";
 import { sign } from "jsonwebtoken";
 
@@ -21,7 +25,8 @@ export class AuthService implements IAuthService {
       auth.username
     );
     if (!usuarioExiste) throw new ApiError(400, "Dados inválidos");
-    if(!usuarioExiste.password) throw new BadResquestError("Senha não cadastrada");
+    if (!usuarioExiste.password)
+      throw new BadResquestError("Senha não cadastrada");
     const senhaValida = compare(auth.password, usuarioExiste.password);
     if (!senhaValida) throw new ApiError(400, "Dados inválidos");
     const secretKey = process.env.SECRET_KEY;
@@ -30,5 +35,5 @@ export class AuthService implements IAuthService {
       expiresIn: "7d",
     });
     return token;
-  }
+  };
 }

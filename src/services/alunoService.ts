@@ -3,50 +3,39 @@ import {
   BadResquestError,
   NotFoundError,
 } from "../helpers/api-erros";
-import {
-  getAllAlunoRepository,
-  getByIdAlunoRepository,
-  postAlunoRepository,
-  putAlunoRepository,
-  deleteAlunoRepository,
-} from "../repositories/alunoRepository";
 import { hash } from "bcrypt";
+import { IAlunoService } from "./interfaces/IAlunoService";
+import { IAlunoRepository } from "../repositories/interfaces/IAlunoRepository";
+import { Aluno } from "../entities/Aluno";
+import { AlunoRepository } from "../repositories/alunoRepository";
+import { Inject, Service } from "typedi";
 
-const getAllAlunoService = async () => {
-  const alunos = await getAllAlunoRepository();
-  return alunos;
-};
+@Service()
+export class AlunoService implements IAlunoService {
+  private alunoRepository: IAlunoRepository;
 
-const getByIdAlunoService = async (id: string) => {
-  if (!id) throw new Error("Id não informado");
-  const aluno = await getByIdAlunoRepository(id);
-  return aluno;
-};
+  constructor(@Inject() alunoRepository: AlunoRepository) {
+    this.alunoRepository = alunoRepository;
+  }
+  getById(id: string): Promise<Aluno | null> {
+    const aluno = this.alunoRepository.getById(id);
+    return aluno;
+  }
+  put(aluno: Aluno): Promise<Aluno> {
+    const alunoAtualizado = this.alunoRepository.put(aluno);
+    return alunoAtualizado;
+  }
+  delete(id: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 
-const postAlunoService = async (aluno: any) => {
-  if (!aluno) throw new Error("Aluno não informado");
-  const newAluno = await postAlunoRepository(aluno);
-  return newAluno;
-};
+  async getAll(): Promise<Aluno[]> {
+    const alunos = await this.alunoRepository.getAll();
+    return alunos;
+  }
 
-const putAlunoService = async (aluno: any) => {
-  if (!aluno) throw new BadResquestError("Aluno não informado");
-  const newAluno = await putAlunoRepository(aluno);
-  return newAluno;
-};
-
-const deleteAlunoService = async (id: string) => {
-  // verificando se o aluno existe
-  if (!id) throw new BadResquestError("Id não informado");
-  const aluno = await getByIdAlunoRepository(id);
-  if (!aluno) throw new NotFoundError("Aluno não encontrado");
-  await deleteAlunoRepository(id);
-};
-
-export {
-  getAllAlunoService,
-  getByIdAlunoService,
-  postAlunoService,
-  putAlunoService,
-  deleteAlunoService,
-};
+  async post(aluno: Aluno): Promise<Aluno> {
+    const newAluno = await this.alunoRepository.post(aluno);
+    return newAluno;
+  }
+}

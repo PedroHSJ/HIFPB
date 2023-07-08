@@ -1,18 +1,26 @@
-import { AppDataSource } from "../data-source";
-import { SalaDeAula } from "../entities/SalaDeAula";
+import { Service } from 'typedi';
+import { AppDataSource } from '../data-source';
+import { SalaDeAula } from '../entities/SalaDeAula';
+import { Repository } from 'typeorm';
+import { ISalaDeAulaRepository } from './interfaces/ISalaDeAulaRepository';
 
-export class SalaDeAulaRepository {
-  async getAll(): Promise<SalaDeAula[]> {
-    const repo = AppDataSource.getRepository(SalaDeAula);
-    const salasDeAulas = repo
-      .createQueryBuilder("salaDeAula")
-      .innerJoinAndSelect("salaDeAula.estabelecimento", "estabelecimento")
-      .getMany();
-    return salasDeAulas;
-  }
-  async post(salaDeAulas: SalaDeAula): Promise<SalaDeAula> {
-    const repo = AppDataSource.getRepository(SalaDeAula);
-    const novaSalaDeAula = await repo.save(salaDeAulas);
-    return { id: novaSalaDeAula.id } as SalaDeAula;
-  }
+@Service()
+export class SalaDeAulaRepository implements ISalaDeAulaRepository {
+    repo: Repository<SalaDeAula>;
+
+    constructor() {
+        this.repo = AppDataSource.getRepository(SalaDeAula);
+    }
+
+    async getAll(): Promise<SalaDeAula[]> {
+        const salasDeAulas = this.repo
+            .createQueryBuilder('salaDeAula')
+            .innerJoinAndSelect('salaDeAula.estabelecimento', 'estabelecimento')
+            .getMany();
+        return salasDeAulas;
+    }
+    async post(salaDeAulas: SalaDeAula): Promise<SalaDeAula> {
+        const novaSalaDeAula = await this.repo.save(salaDeAulas);
+        return { id: novaSalaDeAula.id } as SalaDeAula;
+    }
 }

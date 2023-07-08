@@ -7,17 +7,12 @@ import { IUsuarioService } from "../services/interfaces/IUsuarioService";
 
 @Service()
 export class UsuarioController {
-
   private _usuarioService: IUsuarioService;
 
   constructor(@Inject() usuarioService: UsuarioService) {
     this._usuarioService = usuarioService;
   }
-  getAll = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const usuarios = await this._usuarioService.getAll();
       if (usuarios.length === 0)
@@ -28,11 +23,7 @@ export class UsuarioController {
     }
   };
 
-  getById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  getById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const usuario = await this._usuarioService.getById(id);
@@ -43,28 +34,21 @@ export class UsuarioController {
     }
   };
 
-  getByUsername = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  getByUsername = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { username } = req.params;
       const usuario = await this._usuarioService.getByUsername(
         username as string
       );
       if (!usuario) throw new NotFoundError("Usuario não encontrado");
+      delete usuario.password;
       res.status(200).send(usuario);
     } catch (error) {
       next(error);
     }
   };
 
-  post = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  post = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const usuario = await this._usuarioService.post(req.body);
       res.status(201).send(usuario);
@@ -73,27 +57,17 @@ export class UsuarioController {
     }
   };
 
-  put = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  put = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const usuario = await this._usuarioService.getById(id);
     if (!usuario) throw new NotFoundError("Usuario não encontrado");
     const usuarioBody = req.body;
     usuarioBody.id = id;
-    const usuarioEditado = await this._usuarioService.put(
-      usuarioBody
-    );
+    const usuarioEditado = await this._usuarioService.put(usuarioBody);
     res.status(200).send(usuarioEditado);
   };
 
-  delete = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  delete = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const usuario = await this._usuarioService.delete(id);
     res.status(200).send("Usuário excluído com sucesso");

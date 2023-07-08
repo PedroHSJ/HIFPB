@@ -1,88 +1,43 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  deleteAlunoService,
-  getAllAlunoService,
-  getByIdAlunoService,
-  postAlunoService,
-  putAlunoService,
-} from "../services/alunoService";
-import { nextTick } from "process";
+
 import { NotFoundError } from "../helpers/api-erros";
+import { IAlunoService } from "../services/interfaces/IAlunoService";
+import { AlunoService } from "../services/alunoService";
+import { Inject, Service } from "typedi";
 
-const getAllAlunoController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const alunos = await getAllAlunoService();
-    res.status(200).send(alunos);
-  } catch (error) {
-    next(error);
+@Service()
+export class AlunoController {
+  alunoService: IAlunoService;
+
+  constructor(@Inject() alunoService: AlunoService) {
+    this.alunoService = alunoService;
   }
-};
 
-const getByIdAlunoController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const aluno = await getByIdAlunoService(id);
-    res.status(200).send(aluno);
-  } catch (error) {
-    next(error);
-  }
-};
+  getAll = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const alunos = await this.alunoService.getAll();
+      res.status(200).send(alunos);
+    } catch (error) {
+      next(error);
+    }
+  };
 
-const postAlunoController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const aluno = await postAlunoService(req.body);
-    res.status(201).send(aluno);
-  } catch (error) {
-    next(error);
-  }
-};
+  getById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const aluno = await this.alunoService.getById(id);
+      res.status(200).send(aluno);
+    } catch (error) {
+      next(error);
+    }
+  };
 
-const putAlunoController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    const aluno = await getByIdAlunoService(id);
-    if (!aluno) throw new NotFoundError("Aluno não encontrado");
-    const result = await putAlunoService(aluno);
-    res.status(200).send(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const deleteAlunoController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { id } = req.params;
-    await deleteAlunoService(id);
-    res.status(204).send("Aluno deletado com sucesso");
-  } catch (error) {
-    next(error);
-  }
-};
-
-export {
-  getAllAlunoController,
-  getByIdAlunoController,
-  postAlunoController,
-  putAlunoController,
-  deleteAlunoController,
-};
+  post = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const aluno = await this.alunoService.post(req.body);
+      res.status(201).send(aluno);
+    } catch (error) {
+      next(error);
+    }
+  };
+}

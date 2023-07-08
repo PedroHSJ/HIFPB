@@ -1,18 +1,12 @@
 import { Router } from "express";
-import {
-  deleteAlunoController,
-  getAllAlunoController,
-  getByIdAlunoController,
-  postAlunoController,
-  putAlunoController,
-} from "../controllers/alunoController";
+import Container from "typedi";
+import { AlunoController } from "../controllers/alunoController";
 
 const alunoRoutes = Router();
+const alunoController = Container.get(AlunoController);
 
-alunoRoutes.get("/", getAllAlunoController);
-alunoRoutes.get("/:id", getByIdAlunoController);
-alunoRoutes.post("/", postAlunoController);
-alunoRoutes.put("/:id", putAlunoController);
-alunoRoutes.delete("/:id", deleteAlunoController);
+alunoRoutes.get("/", alunoController.getAll.bind(alunoController));
+alunoRoutes.get("/:id", alunoController.getById.bind(alunoController));
+alunoRoutes.post("/", alunoController.post.bind(alunoController));
 
 export { alunoRoutes };
