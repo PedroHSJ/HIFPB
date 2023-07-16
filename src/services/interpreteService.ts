@@ -31,15 +31,15 @@ export class InterpreteService implements IInterpreteService {
             throw new BadResquestError('Interprete não encontrado');
         }
 
-        interpreteDTO.alunos?.forEach(async (aluno, index) => {
-            const alunoExistente = await this._alunoRepository.getById(
-                interpreteDTO.alunos[index].id
-            );
-            if (!alunoExistente) {
-                throw new BadResquestError('Aluno não encontrado');
-            }
-            interpreteDTO.alunos[index] = alunoExistente as Aluno;
-        });
+        // interpreteDTO.alunos?.forEach(async (aluno, index) => {
+        //     const alunoExistente = await this._alunoRepository.getById(
+        //         interpreteDTO.alunos[index].id
+        //     );
+        //     if (!alunoExistente) {
+        //         throw new BadResquestError('Aluno não encontrado');
+        //     }
+        //     interpreteDTO.alunos[index] = alunoExistente as Aluno;
+        // });
 
         const interprete = plainToClass(Interprete, interpreteDTO);
         const rowsAffected = await this._interpreteRepository.put(

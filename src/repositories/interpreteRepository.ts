@@ -3,10 +3,13 @@ import { AppDataSource } from '../data-source';
 import { Interprete } from '../entities/Interprete';
 import { IInterpreteRepository } from './interfaces/IInterpreteRepository';
 import { Service } from 'typedi';
+import { NextFunction } from 'express';
+import { BadResquestError } from '../helpers/api-erros';
 
 @Service()
 export class InterpreteRepository implements IInterpreteRepository {
     repo: Repository<Interprete>;
+    next: NextFunction;
 
     constructor() {
         this.repo = AppDataSource.getRepository(Interprete);
@@ -23,7 +26,10 @@ export class InterpreteRepository implements IInterpreteRepository {
                 .createQueryBuilder()
                 .relation(Interprete, 'alunos')
                 .of(id)
-                .addAndRemove(alunos ? alunos : [], interpreteAtual?.alunos);
+                .addAndRemove(alunos ? alunos : [], interpreteAtual?.alunos)
+                .catch((erro) => {
+                    throw new BadResquestError(erro.message);
+                });
         }
 
         return updateResult.affected ?? 0;
@@ -52,7 +58,10 @@ export class InterpreteRepository implements IInterpreteRepository {
             .createQueryBuilder('interpretes')
             .leftJoinAndSelect('interpretes.alunos', 'alunos')
             .where('interpretes.id = :id', { id: id })
-            .getOne();
+            .getOne()
+            .catch((erro) => {
+                throw new BadResquestError(erro.message);
+            });
         return interprete ? interprete : null;
     }
 }

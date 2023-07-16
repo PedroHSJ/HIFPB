@@ -25,6 +25,7 @@ export class InterpreteController {
             );
             res.status(201).send(novoInterprete);
         } catch (error) {
+            console.log('catch');
             next(error);
         }
     }
@@ -49,6 +50,7 @@ export class InterpreteController {
             if (!interprete) {
                 res.status(404).send();
             }
+            // if(interprete instanceof Error)
             res.status(200).send(interprete);
         } catch (error) {
             next(error);

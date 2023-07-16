@@ -3,6 +3,7 @@ import { AppDataSource } from '../data-source';
 import { Repository } from 'typeorm';
 import { Inject, Service } from 'typedi';
 import { IAlunoRepository } from './interfaces/IAlunoRepository';
+import { BadResquestError } from '../helpers/api-erros';
 @Service()
 export class AlunoRepository implements IAlunoRepository {
     repo: Repository<Aluno>;
@@ -23,7 +24,10 @@ export class AlunoRepository implements IAlunoRepository {
             .createQueryBuilder('aluno')
             .leftJoinAndSelect('aluno.interpretes', 'interprete')
             .where('aluno.id = :id', { id: id })
-            .getOne();
+            .getOne()
+            .catch((erro) => {
+                throw new BadResquestError(erro.message);
+            });
 
         return aluno ? aluno : null;
     };

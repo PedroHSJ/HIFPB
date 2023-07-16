@@ -1,41 +1,55 @@
-import { DataSource } from "typeorm";
-import { Seeder, SeederFactoryManager } from "typeorm-extension";
-import { DiaDaSemana } from "../entities/DiaDaSemana";
+import { DataSource } from 'typeorm';
+import { Seeder, SeederFactoryManager } from 'typeorm-extension';
+import { DiaDaSemana } from '../entities/DiaDaSemana';
+import { DiasDaSemanaEnum } from '../enums/DiasDaSemana';
 
 export class DiasDaSemanaSeeder implements Seeder {
     async run(
         dataSource: DataSource,
         factoryManager: SeederFactoryManager
-      ): Promise<void> {
+    ): Promise<void> {
         const diasDaSemanaRepo = dataSource.getRepository(DiaDaSemana);
-        const segunda = await diasDaSemanaRepo.findOne({ where: { nome: "Segunda" } });
+        const segunda = await diasDaSemanaRepo.findOne({
+            where: { dia: DiasDaSemanaEnum.SEGUNDA },
+        });
         if (!segunda) {
-            await diasDaSemanaRepo.save({ nome: "Segunda" });
+            await diasDaSemanaRepo.save({ dia: DiasDaSemanaEnum.SEGUNDA });
         }
-        const terca = await diasDaSemanaRepo.findOne({ where: { nome: "Terça" } });
+        const terca = await diasDaSemanaRepo.findOne({
+            where: { dia: DiasDaSemanaEnum.TERCA },
+        });
         if (!terca) {
-            await diasDaSemanaRepo.save({ nome: "Terça" });
+            await diasDaSemanaRepo.save({ dia: DiasDaSemanaEnum.TERCA });
         }
-        const quarta = await diasDaSemanaRepo.findOne({ where: { nome: "Quarta" } });
+        const quarta = await diasDaSemanaRepo.findOne({
+            where: { dia: DiasDaSemanaEnum.QUARTA },
+        });
         if (!quarta) {
-            await diasDaSemanaRepo.save({ nome: "Quarta" });
+            await diasDaSemanaRepo.save({ dia: DiasDaSemanaEnum.QUARTA });
         }
-        const quinta = await diasDaSemanaRepo.findOne({ where: { nome: "Quinta" } });
+        const quinta = await diasDaSemanaRepo.findOne({
+            where: { dia: DiasDaSemanaEnum.QUINTA },
+        });
         if (!quinta) {
-            await diasDaSemanaRepo.save({ nome: "Quinta" });
+            await diasDaSemanaRepo.save({ dia: DiasDaSemanaEnum.QUINTA });
         }
-        const sexta = await diasDaSemanaRepo.findOne({ where: { nome: "Sexta" } });
+        const sexta = await diasDaSemanaRepo.findOne({
+            where: { dia: DiasDaSemanaEnum.SEXTA },
+        });
         if (!sexta) {
-            await diasDaSemanaRepo.save({ nome: "Sexta" });
+            await diasDaSemanaRepo.save({ dia: DiasDaSemanaEnum.SEXTA });
         }
-        const sabado = await diasDaSemanaRepo.findOne({ where: { nome: "Sábado" } });
+        const sabado = await diasDaSemanaRepo.findOne({
+            where: { dia: DiasDaSemanaEnum.SABADO },
+        });
         if (!sabado) {
-            await diasDaSemanaRepo.save({ nome: "Sábado" });
+            await diasDaSemanaRepo.save({ dia: DiasDaSemanaEnum.SABADO });
         }
-        const domingo = await diasDaSemanaRepo.findOne({ where: { nome: "Domingo" } });
+        const domingo = await diasDaSemanaRepo.findOne({
+            where: { dia: DiasDaSemanaEnum.DOMINGO },
+        });
         if (!domingo) {
-            await diasDaSemanaRepo.save({ nome: "Domingo" });
+            await diasDaSemanaRepo.save({ dia: DiasDaSemanaEnum.DOMINGO });
         }
-
-      }
+    }
 }

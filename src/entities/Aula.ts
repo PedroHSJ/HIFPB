@@ -1,4 +1,5 @@
 import {
+    Column,
     CreateDateColumn,
     Entity,
     JoinColumn,
@@ -14,6 +15,7 @@ import { Interprete } from './Interprete';
 import { Aluno } from './Aluno';
 import { DiaDaSemana } from './DiaDaSemana';
 import { SalaDeAula } from './SalaDeAula';
+import { DiasDaSemanaEnum } from '../enums/DiasDaSemana';
 
 @Entity('aulas')
 export class Aula implements IBase {
@@ -30,9 +32,8 @@ export class Aula implements IBase {
     @JoinColumn({ name: 'aluno_id', referencedColumnName: 'id' })
     aluno: Aluno;
 
-    @ManyToOne(() => DiaDaSemana, { nullable: false })
-    @JoinColumn({ name: 'dia_da_semana_id', referencedColumnName: 'id' })
-    dia_da_semana: DiaDaSemana;
+    @Column({ type: 'enum', enum: DiasDaSemanaEnum })
+    dia_da_semana: DiasDaSemanaEnum;
 
     @ManyToOne(() => SalaDeAula, { nullable: false })
     @JoinColumn({ name: 'sala_de_aula_id', referencedColumnName: 'id' })

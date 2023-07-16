@@ -14,9 +14,13 @@ export class SalaDeAulaRepository implements ISalaDeAulaRepository {
 
     async getAll(): Promise<SalaDeAula[]> {
         const salasDeAulas = this.repo
-            .createQueryBuilder('salaDeAula')
-            .innerJoinAndSelect('salaDeAula.estabelecimento', 'estabelecimento')
+            .createQueryBuilder('salas_de_aula')
+            .leftJoinAndSelect(
+                'salas_de_aula.estabelecimento',
+                'estabelecimento'
+            )
             .getMany();
+
         return salasDeAulas;
     }
     async post(salaDeAulas: SalaDeAula): Promise<SalaDeAula> {
