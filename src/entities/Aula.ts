@@ -32,7 +32,7 @@ export class Aula implements IBase {
     @JoinColumn({ name: 'aluno_id', referencedColumnName: 'id' })
     aluno: Aluno;
 
-    @Column({ type: 'enum', enum: DiasDaSemanaEnum })
+    @Column({ type: 'enum', enum: DiasDaSemanaEnum, unique: true })
     dia_da_semana: DiasDaSemanaEnum;
 
     @ManyToOne(() => SalaDeAula, { nullable: false })

@@ -15,6 +15,7 @@ export function errorMiddleware(
         error.inner.forEach((err: any) => {
             errors[err.path] = err.errors;
         });
+
         return res.status(400).json({ message: 'Erro de validação.', errors });
     }
 
