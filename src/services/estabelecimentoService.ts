@@ -4,21 +4,28 @@ import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 import { BadResquestError, ValidationApiError } from '../helpers/api-erros';
 import { json } from 'express';
-export class EstabelecimentoService {
-    constructor() {}
+import { IEstabelecimentoService } from './interfaces/IEstabelecimentoService';
+import { Inject, Service } from 'typedi';
+import { IEstabelecimentoRepository } from '../repositories/interfaces/IEstabelecimentoRepository';
+@Service()
+export class EstabelecimentoService implements IEstabelecimentoService {
+    estabelecimentoRepository: IEstabelecimentoRepository;
+
+    constructor(
+        @Inject() estabelecimentoRepository: EstabelecimentoRepository
+    ) {
+        this.estabelecimentoRepository = estabelecimentoRepository;
+    }
 
     async getAll(): Promise<Estabelecimento[]> {
-        const estabelecimentos = await new EstabelecimentoRepository().getAll();
+        const estabelecimentos = await this.estabelecimentoRepository.getAll();
         return estabelecimentos;
     }
     async post(estabelecimento: Estabelecimento): Promise<Estabelecimento> {
-        const errors = await validate(estabelecimento);
-        if (errors.length > 0) throw new ValidationApiError(errors);
-        console.log(errors);
         //Tirando caracteres especiais do CNPJ
         estabelecimento.cnpj = estabelecimento.cnpj.replace(/[^\d]+/g, '');
         estabelecimento.nome = estabelecimento.nome.toUpperCase().trim();
-        const newEstabelecimento = await new EstabelecimentoRepository().post(
+        const newEstabelecimento = await this.estabelecimentoRepository.post(
             estabelecimento
         );
         return newEstabelecimento;

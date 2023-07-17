@@ -2,13 +2,18 @@ import { Router } from 'express';
 
 import { EstabelecimentoController } from '../controllers/estabelecimentoController';
 import estabelecimentoValidation from '../middlewares/validations/estabelecimentoValidation';
+import Container from 'typedi';
 
 const estabelecimentoRoutes = Router();
-estabelecimentoRoutes.get('/', new EstabelecimentoController().getAll);
+const estabelecimentoController = Container.get(EstabelecimentoController);
+estabelecimentoRoutes.get(
+    '/',
+    estabelecimentoController.getAll.bind(estabelecimentoController)
+);
 estabelecimentoRoutes.post(
     '/',
     estabelecimentoValidation,
-    new EstabelecimentoController().post
+    estabelecimentoController.post.bind(estabelecimentoController)
 );
 
 export { estabelecimentoRoutes };

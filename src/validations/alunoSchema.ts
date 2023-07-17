@@ -7,14 +7,13 @@ import {
     NOME_REQUIRED,
 } from '../constants';
 
-const interpretePostSchema = yup.object().shape({
+const alunoPostSchema = yup.object().shape({
     nome: yup
         .string()
         .min(3, NOME_MIN_LENGTH)
         .max(255, NOME_MAX_LENGTH)
         .required(NOME_REQUIRED),
     cpf: yup.string().length(11, CPF_HAS_lENGTH).required(CPF_REQUIRED),
-    alunos: yup.array().of(yup.string().uuid().required()),
 });
 
-export { interpretePostSchema };
+export { alunoPostSchema };
