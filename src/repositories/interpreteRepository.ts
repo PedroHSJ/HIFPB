@@ -49,6 +49,7 @@ export class InterpreteRepository implements IInterpreteRepository {
         const interpretes = await this.repo
             .createQueryBuilder('interpretes')
             .leftJoinAndSelect('interpretes.alunos', 'alunos')
+            .leftJoinAndSelect('alunos.aulas', 'aulas')
             .getMany();
         return interpretes;
     }
@@ -57,6 +58,7 @@ export class InterpreteRepository implements IInterpreteRepository {
         const interprete = await this.repo
             .createQueryBuilder('interpretes')
             .leftJoinAndSelect('interpretes.alunos', 'alunos')
+            .leftJoinAndSelect('alunos.aulas', 'aulas')
             .where('interpretes.id = :id', { id: id })
             .getOne()
             .catch((erro) => {

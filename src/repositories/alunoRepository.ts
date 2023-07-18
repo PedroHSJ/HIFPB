@@ -15,6 +15,7 @@ export class AlunoRepository implements IAlunoRepository {
         const alunos = await this.repo
             .createQueryBuilder('aluno')
             .leftJoinAndSelect('aluno.interpretes', 'interprete')
+            .leftJoinAndSelect('aluno.aulas', 'aula')
             .getMany();
         return alunos;
     };
