@@ -10,6 +10,7 @@ import { AlunoRepository } from '../repositories/alunoRepository';
 import { InterpreteDTO } from '../dtos/InterpreteDTO';
 import { Aluno } from '../entities/Aluno';
 import { plainToClass } from 'class-transformer';
+import { hash } from 'bcrypt';
 
 @Service()
 export class InterpreteService implements IInterpreteService {
@@ -59,6 +60,8 @@ export class InterpreteService implements IInterpreteService {
                 throw new BadResquestError('CPF já cadastrado');
             }
         }
+        const senha = await hash(interprete.password, 10);
+        interprete.password = senha;
         const novoInterprete = await this._interpreteRepository.post(
             interprete
         );
