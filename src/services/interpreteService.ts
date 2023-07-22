@@ -82,4 +82,10 @@ export class InterpreteService implements IInterpreteService {
         const interprete = await this._interpreteRepository.getById(id);
         return interprete ? interprete : null;
     }
+    async getByUsername(username: string): Promise<Interprete | null> {
+        const interprete = await this._interpreteRepository.getByUsername(
+            username
+        );
+        return interprete ? interprete : null;
+    }
 }

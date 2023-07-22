@@ -66,4 +66,18 @@ export class InterpreteRepository implements IInterpreteRepository {
             });
         return interprete ? interprete : null;
     }
+
+    async getByUsername(username: string): Promise<Interprete | null> {
+        const interprete = await this.repo
+            .createQueryBuilder('interpretes')
+            .leftJoinAndSelect('interpretes.alunos', 'alunos')
+            .leftJoinAndSelect('alunos.aulas', 'aulas')
+            .where('interpretes.username = :username', { username: username })
+            .getOne()
+            .catch((erro) => {
+                throw new BadResquestError(erro.message);
+            });
+
+        return interprete ? interprete : null;
+    }
 }

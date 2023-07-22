@@ -34,6 +34,7 @@
         "jsonwebtoken": "^9.0.0",
         "pg": "^8.11.0",
         "reflect-metadata": "^0.1.13",
+        "swagger-express-ts": "^1.1.0",
         "typedi": "^0.10.0",
         "typeorm": "^0.3.16",
         "typeorm-extension": "^2.8.1",
