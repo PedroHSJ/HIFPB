@@ -132,6 +132,9 @@
                     "data_alteracao": {
                         "type": "date"
                     },
+                    "horario": {
+                        "type": "time"
+                    },
                     "sala_de_aula": {
                         "$ref": "#/components/schemas/SalaDeAula"
                     },
@@ -895,6 +898,21 @@
                                             "SABADO",
                                             "DOMINGO"
                                         ]
+                                    },
+                                    "aluno": {
+                                        "type": "object",
+                                        "required": false,
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "format": "uuid"
+                                            }
+                                        }
+                                    },
+                                    "horario": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "description": "Horário da aula"
                                     }
                                 }
                             }

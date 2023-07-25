@@ -38,4 +38,7 @@ export class Aula implements IBase {
     @ManyToOne(() => SalaDeAula, { nullable: false })
     @JoinColumn({ name: 'sala_de_aula_id', referencedColumnName: 'id' })
     sala_de_aula: SalaDeAula;
+
+    @Column({ type: 'time' })
+    horario: Date;
 }
