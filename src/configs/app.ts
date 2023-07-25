@@ -1,34 +1,46 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request, Response } from 'express';
 import {
-  alunoRoutes,
-  authRoutes,
-  estabelecimentoRoutes,
-  usuarioRoutes,
-  salaDeAulaRoutes,
-  interpreteRoutes,
-  aulaRoutes,
-} from "../routes";
-import { errorMiddleware } from "../middlewares/error";
-import validateToken from "../middlewares/authMiddleware";
+    alunoRoutes,
+    authRoutes,
+    estabelecimentoRoutes,
+    usuarioRoutes,
+    salaDeAulaRoutes,
+    interpreteRoutes,
+    aulaRoutes,
+} from '../routes';
+import { errorMiddleware } from '../middlewares/error';
+import validateToken from '../middlewares/authMiddleware';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpecs from '../../swagger-config.json'; // Importe o arquivo criado no passo 3
 
 const app = express();
 
 app.use(express.json());
 
+//swagger
+app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpecs, { explorer: true })
+);
+
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization'
+    );
+    next();
 });
 
-app.use("/usuario", usuarioRoutes);
-app.use("/auth", authRoutes);
-app.use("/estabelecimento", estabelecimentoRoutes);
-app.use("/salaDeAula", salaDeAulaRoutes);
-app.use("/aluno", alunoRoutes)
-app.use("/interprete", interpreteRoutes)
-app.use("/aula", aulaRoutes)
+app.use('/usuario', usuarioRoutes);
+app.use('/auth', authRoutes);
+app.use('/estabelecimento', estabelecimentoRoutes);
+app.use('/salaDeAula', salaDeAulaRoutes);
+app.use('/aluno', alunoRoutes);
+app.use('/interprete', interpreteRoutes);
+app.use('/aula', aulaRoutes);
 
 //Interceptando erros
 app.use(errorMiddleware);

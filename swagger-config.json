@@ -1,0 +1,925 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "API de gestão de alunos e interpretes",
+        "version": "1.0.0",
+        "description": "API para gestão de alunos e interpretes, com a possibilidade de criar estabelecimentos, salas de aula e aulas.",
+        "license": {
+            "name": "MIT",
+            "url": "https://spdx.org/licenses/MIT.html"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000"
+        }
+    ],
+
+    "components": {
+        "schemas": {
+            "Usuario": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "data_criacao": {
+                        "type": "date"
+                    },
+                    "data_alteracao": {
+                        "type": "date"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "ativo": {
+                        "type": "number"
+                    },
+                    "roles": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Roles"
+                        }
+                    }
+                }
+            },
+            "Roles": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "nome": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Estabelecimento": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "cnpj": {
+                        "type": "string"
+                    },
+                    "data_criacao": {
+                        "type": "date"
+                    },
+                    "data_alteracao": {
+                        "type": "date"
+                    },
+                    "salas_de_aula": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SalaDeAula"
+                        }
+                    }
+                }
+            },
+            "SalaDeAula": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "data_criacao": {
+                        "type": "date"
+                    },
+                    "data_alteracao": {
+                        "type": "date"
+                    },
+                    "estabelecimento": {
+                        "type": "object",
+                        "items": {
+                            "$ref": "#/components/schemas/Estabelecimento"
+                        }
+                    },
+                    "aulas": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Aula"
+                        }
+                    }
+                }
+            },
+            "Aula": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "data_criacao": {
+                        "type": "date"
+                    },
+                    "data_alteracao": {
+                        "type": "date"
+                    },
+                    "sala_de_aula": {
+                        "$ref": "#/components/schemas/SalaDeAula"
+                    },
+                    "dia_da_semana": {
+                        "$ref": "#/components/schemas/DiaDaSemana"
+                    },
+                    "aluno": {
+                        "$ref": "#/components/schemas/Aluno"
+                    }
+                }
+            },
+            "Aluno": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "type": "string"
+                    },
+
+                    "data_criacao": {
+                        "type": "date"
+                    },
+                    "data_alteracao": {
+                        "type": "date"
+                    },
+                    "aulas": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Aula"
+                        }
+                    },
+                    "interpretes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Interprete"
+                        }
+                    }
+                }
+            },
+            "Interprete": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "data_criacao": {
+                        "type": "date"
+                    },
+                    "data_alteracao": {
+                        "type": "date"
+                    },
+                    "alunos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Aluno"
+                        }
+                    }
+                }
+            },
+            "DiaDaSemana": {
+                "type": "string",
+                "enum": [
+                    "SEGUNDA",
+                    "TERCA",
+                    "QUARTA",
+                    "QUINTA",
+                    "SEXTA",
+                    "SABADO",
+                    "DOMINGO"
+                ]
+            }
+        }
+    },
+    "paths": {
+        "/auth": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "Autentica um usuario",
+                "description": "",
+                "operationId": "auth",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/usuario": {
+            "get": {
+                "tags": ["Usuarios"],
+                "summary": "Lista todos os usuarios",
+                "description": "",
+                "operationId": "getUsuarios",
+
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Usuario"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Usuarios"],
+                "summary": "Cria um novo usuario",
+                "description": "",
+                "operationId": "createUsuario",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "ativo": {
+                                        "type": "number"
+                                    },
+                                    "roles": {
+                                        "required": false,
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario criado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "format": "uuid"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/usuario/{id}": {
+            "get": {
+                "tags": ["Usuarios"],
+                "summary": "Busca um usuario pelo ID",
+                "description": "",
+                "operationId": "getUsuarioById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario encontrado",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Usuarios"],
+                "summary": "Atualiza um usuario pelo ID",
+                "description": "",
+                "operationId": "updateUsuarioById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Usuario"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Usuario"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/interprete": {
+            "get": {
+                "tags": ["Interpretes"],
+                "summary": "Lista todos os interpretes",
+                "description": "",
+                "operationId": "getInterpretes",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Lista de interpretes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Interprete"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Interpretes"],
+                "summary": "Cria um novo interprete",
+                "description": "",
+                "operationId": "createInterprete",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "cpf": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "alunos": {
+                                        "type": "array",
+                                        "required": false,
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Interprete criado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "format": "uuid"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/interprete/{id}": {
+            "get": {
+                "tags": ["Interpretes"],
+                "summary": "Busca um interprete pelo ID",
+                "description": "",
+                "operationId": "getInterpreteById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do interprete",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Interprete encontrado",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Interpretes"],
+                "summary": "Atualiza um interprete pelo ID",
+                "description": "",
+                "operationId": "updateInterpreteById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID do interprete",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "cpf": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "alunos": {
+                                        "type": "array",
+                                        "required": false,
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Interprete atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Interprete"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/aluno": {
+            "get": {
+                "tags": ["Alunos"],
+                "summary": "Lista todos os alunos",
+                "description": "",
+                "operationId": "getAlunos",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Lista de alunos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Aluno"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Alunos"],
+                "summary": "Cria um novo aluno",
+                "description": "",
+                "operationId": "createAluno",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "cpf": {
+                                        "type": "string"
+                                    },
+                                    "aulas": {
+                                        "type": "array",
+                                        "required": false,
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "interpretes": {
+                                        "type": "array",
+                                        "required": false,
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Aluno criado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Aluno"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/estabelecimento": {
+            "get": {
+                "tags": ["Estabelecimentos"],
+                "summary": "Lista todos os estabelecimentos",
+                "description": "",
+                "operationId": "getEstabelecimentos",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Lista de estabelecimentos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Estabelecimento"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Estabelecimentos"],
+                "summary": "Cria um novo estabelecimento",
+                "description": "",
+                "operationId": "createEstabelecimento",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "cnpj": {
+                                        "type": "string"
+                                    },
+                                    "salas_de_aula": {
+                                        "type": "array",
+                                        "required": false,
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Estabelecimento criado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Estabelecimento"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/salaDeAula": {
+            "get": {
+                "tags": ["Salas de Aula"],
+                "summary": "Lista todas as salas de aula",
+                "description": "",
+                "operationId": "getSalasDeAula",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Lista de salas de aula",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SalaDeAula"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Salas de Aula"],
+                "summary": "Cria uma nova sala de aula",
+                "description": "",
+                "operationId": "createSalaDeAula",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nome": {
+                                        "type": "string"
+                                    },
+                                    "estabelecimento": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "format": "uuid"
+                                            }
+                                        }
+                                    },
+                                    "aulas": {
+                                        "type": "array",
+                                        "required": false,
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Sala de aula criada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "format": "uuid"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/aula": {
+            "get": {
+                "tags": ["Aulas"],
+                "summary": "Lista todas as aulas",
+                "description": "",
+                "operationId": "getAulas",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Lista de aulas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Aula"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Aulas"],
+                "summary": "Cria uma nova aula",
+                "description": "",
+                "operationId": "createAula",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "sala_de_aula": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "format": "uuid"
+                                            }
+                                        }
+                                    },
+                                    "dia_da_semana": {
+                                        "type": "string",
+                                        "enum": [
+                                            "SEGUNDA",
+                                            "TERCA",
+                                            "QUARTA",
+                                            "QUINTA",
+                                            "SEXTA",
+                                            "SABADO",
+                                            "DOMINGO"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Aula criada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "format": "uuid"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

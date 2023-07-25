@@ -23,7 +23,10 @@ export class SalaDeAulaController {
     async post(req: Request, res: Response, next: NextFunction) {
         try {
             const salaDeAulas = req.body as SalaDeAulaDTO;
-            const novaSalaDeAula = this.salaDeAulaService.post(salaDeAulas);
+            const novaSalaDeAula = await this.salaDeAulaService.post(
+                salaDeAulas
+            );
+            console.log(novaSalaDeAula);
             res.status(201).send(novaSalaDeAula);
         } catch (error) {
             next(error);

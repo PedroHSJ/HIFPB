@@ -19,6 +19,7 @@ export class SalaDeAulaRepository implements ISalaDeAulaRepository {
                 'salas_de_aula.estabelecimento',
                 'estabelecimento'
             )
+            .leftJoinAndSelect('salas_de_aula.aulas', 'aulas')
             .getMany();
 
         return salasDeAulas;
